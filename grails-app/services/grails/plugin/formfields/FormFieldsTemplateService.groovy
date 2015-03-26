@@ -36,13 +36,15 @@ class FormFieldsTemplateService {
     GrailsConventionGroovyPageLocator groovyPageLocator
     GrailsPluginManager pluginManager
 
+    private
+    Closure findTemplateCached = mull 
+
     Map findTemplate(BeanPropertyAccessor propertyAccessor, String templateName) {
+        if (!findTeplateCached) 
+            findTeplateCached = shouldCache() ? this.&findTemplateCacheable.memoize() : this.&findTemplateCacheable
         findTemplateCached(propertyAccessor, controllerNamespace, controllerName, actionName, templateName)
     }
-
-    private
-    final Closure findTemplateCached = shouldCache() ? this.&findTemplateCacheable.memoize() : this.&findTemplateCacheable
-
+    
     private Map findTemplateCacheable(BeanPropertyAccessor propertyAccessor, String controllerNamespace, String controllerName, String actionName, String templateName) {
         def candidatePaths = candidateTemplatePaths(propertyAccessor, controllerNamespace, controllerName, actionName, templateName)
 
